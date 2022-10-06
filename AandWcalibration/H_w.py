@@ -1,11 +1,11 @@
 import numpy as np
 
-# une méthode naïve pour calculer H_w
+# une méthode naïve pour calculer H_W
 # A*(Eij) Ci->j
 # (Eij)*A Lj-i
 
 
-def H_w(M1, M2, B1, B2):
+def H_W(M1, M2, B1, B2):
     invM1 = np.linalg.inv(M1)
     invB1 = np.linalg.inv(B1)
     B1_B2 = invB1@B2  # (B1)^-1*B2
@@ -15,16 +15,18 @@ def H_w(M1, M2, B1, B2):
         for j in range(4):
             zero[i, j] = 1
             if(i == 0 and j == 0):
-                W = (M1_M2@zero-zero@B1_B2).reshape((16, 1))
+                HW = (M1_M2@zero-zero@B1_B2).reshape((16, 1))
             else:
-                W = np.concatenate(
-                    (W, (M1_M2@zero-zero@B1_B2).reshape((16, 1))), axis=1)
+                HW = np.concatenate(
+                    (HW, (M1_M2@zero-zero@B1_B2).reshape((16, 1))), axis=1)
             zero[i, j] = 0
-    return W
+    return HW
 
 
 # take around 0.4 on a mac pro processor
-# I = np.identity(4)
-# wI = np.ones((4, 4))
-# print("#####_H_w_##########")
-# print(H_w(I, wI, I, wI))
+
+
+I = np.identity(4)
+wI = np.ones((4, 4))
+print("#####_H_W_##########")
+print(H_W(I, wI, I, wI))
