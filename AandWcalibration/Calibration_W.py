@@ -1,65 +1,37 @@
 import numpy as np
-from  K_W import K_W
+from K_W import K_W
+import Simulation as sim
 
-def Calibration_W(M_0,M_1,M_2,M_3,B_0,B_1,B_2,B_3):
-    KW = K_W(M_0,M_1,M_2,M_3,B_0,B_1,B_2,B_3)
-    eigenvalues , eigenvectors = np.linalg.eigh(KW)
-    v = eigenvectors[:,0]
+
+def Calibration_W(M_0, M_1, M_2, M_3, B_0, B_1, B_2, B_3):
+    KW = K_W(M_0, M_1, M_2, M_3, B_0, B_1, B_2, B_3)
+    eigenvalues, eigenvectors = np.linalg.eigh(KW)
+    v = eigenvectors[:, 0]
     v = (1/v[0])*v
 
-    return v.reshape((4,4))
+    return v.reshape((4, 4))
 
 
-##Application
-#Matrices M de Muller
-M_Air = np.identity(4)
+# Application
+# Matrices M de Muller
+M_Air = sim.M_Air
 
-M_Pol0 = np.array([[0.5000,    0.5000,         0,         0],
-                   [0.5000,    0.5000,         0,         0],
-                   [     0,         0,         0,         0],
-                   [     0,         0,         0,         0]
-                  ])
+M_Pol0 = sim.f_Polar
 
-M_Pol90 = np.array([[ 0.5000,    -0.5000,         0,         0],
-                    [-0.5000,     0.5000,         0,         0],
-                    [      0,          0,         0,         0],
-                    [      0,          0,         0,         0]
-                  ])
+M_Pol90 = sim.M_Pol90
 
-M_Ret30 = np.array([[1.0000,         0,              0,          0],
-                   [      0,    0.2500,         0.4330,    -0.8660],
-                   [      0,    0.4330,         0.7500,     0.5000],
-                   [      0,    0.8660,        -0.5000,     0.0000]
-                   ])
-
-    
-#Matrices B des mesures 
-B_Air = np.array([[0.1074,    0.4528,    1.6275,    1.8984],
-                  [0.4528,    1.4939,    1.6220,    1.6275],
-                  [1.6275,    1.6220,    1.4939,    0.4528],
-                  [1.8984,    1.6275,    0.4528,    0.1074]
-                 ])
-
-B_Pol0 = np.array([[0.5551,    0.9204,    0.9204,    0.5551],
-                   [0.9204,    1.5260,    1.5260,    0.9204],
-                   [0.9204,    1.5260,    1.5260,    0.9204],
-                   [0.5551,    0.9204,    0.9204,    0.5551]
-                  ])
-
-B_Pol90 = np.array([[0.4477,    0.1197,    0.1197,    0.4477],
-                    [0.1197,    0.0320,    0.0320,    0.1197],
-                    [0.1197,    0.0320,    0.0320,    0.1197],
-                    [0.4477,    0.1197,    0.1197,    0.4477]
-                   ])
-
-B_Ret30 = np.array([[0.9205,    1.8068,    1.6177,    1.1819],
-                    [1.8068,    1.8695,    0.7791,    0.2399],
-                    [1.6177,    0.7791,    1.1304,    0.3758],
-                    [1.1819,    0.2399,    0.3758,    0.7186]
-                   ])
+M_Ret30 = sim.M_Ret30
 
 
- 
-    
+# Matrices B des mesures
+B_Air = sim.MBN
+
+B_Pol0 = sim.MBN_CalPol0
+
+B_Pol90 = sim.MBN_CalPol90
+
+B_Ret30 = sim.MBN_CalRet30
+
 print("##### K_W eigenvalues ##########")
-print(Calibration_W(M_Air,M_Pol0,M_Pol90,M_Ret30,B_Air,B_Pol0,B_Pol90,B_Ret30))
+print(Calibration_W(M_Air, M_Pol0, M_Pol90,
+      M_Ret30, B_Air, B_Pol0, B_Pol90, B_Ret30))
