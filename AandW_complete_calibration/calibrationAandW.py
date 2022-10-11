@@ -1,6 +1,6 @@
 import numpy as np
 import sys
-sys.path.insert(1, 'AandW_pixel_calibration/')
+sys.path.insert(1, '/Users/mohamedmahmoudahmedmaloum/Desktop/Calibration_of_polarimeters/AandW_pixel_calibration')
 from Calibration_A import Calibration_A
 from Calibration_W import Calibration_W
 
@@ -19,5 +19,7 @@ def calibrationAandW(M_0, M_1, M_2, M_3, B_0, B_1, B_2, B_3):
             W_pixel = Calibration_W(M_0, M_1, M_2, M_3, B0_pixel, B1_pixel, B2_pixel, B3_pixel)
             A[i,j,:] = A_pixel
             W[i,j,:] = W_pixel
+            print('i ', i)
+            print('j ', j)
 
     return A , W
