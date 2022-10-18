@@ -32,6 +32,6 @@ B_Pol90 = sim.MBN_CalPol90
 
 B_Ret30 = sim.MBN_CalRet30
 
-print("##### K_W eigenvalues ##########")
-print(Calibration_W(M_Air, M_Pol0, M_Pol90,
-      M_Ret30, B_Air, B_Pol0, B_Pol90, B_Ret30))
+# print("##### K_W eigenvalues ##########")
+# print(Calibration_W(M_Air, M_Pol0, M_Pol90,
+#       M_Ret30, B_Air, B_Pol0, B_Pol90, B_Ret30))
