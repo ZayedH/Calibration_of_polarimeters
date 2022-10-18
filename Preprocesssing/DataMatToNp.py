@@ -4,10 +4,8 @@ import sys
 from scipy.io import loadmat
 
 sys.path.insert(1, 'AandW_pixel_calibration')
-from Calibration_A import *
+import Simulation as sim
 
-sys.path.insert(1, 'AandW_complete_calibration')
-from NaiveCalibrationAandW import *
 
 
 # path = os.getcwd()
@@ -20,13 +18,33 @@ B_0 = a['B0']
 B_1 = b['E1_PSG']
 B_2 = c['E2_PSG']
 B_3 = d['E3_PSG']
-# t1 = time.perf_counter()
-# print(B_0[:,0])
-# t2 = time.perf_counter()
-# print(t2 - t1)
+
+n = 256
+
+b0 =B_0[0:n, 0:n]
+b1 =B_1[0:n, 0:n]
+b2 =B_2[0:n, 0:n]
+b3 =B_3[0:n, 0:n]
+
+A = np.zeros((n, n, 4, 4))
+W = np.zeros((n, n, 4, 4))
+
+# Matrices M de Muller
+M_Air = sim.M_Air
+
+M_Pol0 = sim.f_Polar
+
+M_Pol90 = sim.M_Pol90
+
+M_Ret30 = sim.M_Ret30
+
+
+
 
 # t1 = time.perf_counter()
-# A  , W = calibrationAandW(M_Air, M_Pol0, M_Pol90, M_Ret30, B_0, B_1, B_2, B_3)
+# calibrationAandW()
 # t2 = time.perf_counter()
-# print(np.shape(A))
-# print(t2 - t1)
+# rec(0,n-1,0,n-1,n)
+# t3 = time.perf_counter()
+# print("naive: ",t2 - t1)
+# print("Rec: ",t3 - t2)
