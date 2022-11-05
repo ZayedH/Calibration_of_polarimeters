@@ -1,4 +1,3 @@
-import time
 import numpy as np
 import sys
 from scipy.io import loadmat
