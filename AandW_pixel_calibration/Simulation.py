@@ -17,8 +17,8 @@ def f_Retarder(d): return np.array([[1, 0, 0, 0],
 # Rotation d'un angle t. Angle positif -> antihoraire en regardant le faisceau !
 
 def f_Rotation(a): return np.array([[1, 0, 0, 0],
-                                    [0, np.cos(2*a), np.sin(2*a), 0],
-                                    [0, -np.sin(2*a), np.cos(2*a), 0],
+                                    [0, np.cos(2*a), -np.sin(2*a), 0],
+                                    [0, np.sin(2*a), np.cos(2*a), 0],
                                     [0, 0, 0, 1]])
 
 
