@@ -5,24 +5,51 @@ import Calibration_W as w
 # We search ThetaP for polarizer and ThetaR for retarder
 
 
-def computeMuller(b0, b):
+def ComputeEigenvaluesCmatrix(b0, b):
     b0inv = np.linalg.inv(b0)
     M_similar = b@b0inv
     eigenvalues, eigenvectors = np.linalg.eig(M_similar)
+
     return eigenvalues
 
 
-def t_Icp_Ic_Is(eigenvalues):
+def Compute_t_Icp_Ic_Is(eigenvalues):
     "We assume that it respects the theoretical form"
-    real = np.real(eigenvalues)
-    imag = np.imag(eigenvalues)
+    real_eigenvalues = []
+    complex_eigenvalues = []
+    for eigv in eigenvalues:
+        if(np.imag(eigv)!=0):
+            complex_eigenvalues.append(eigv)
+        else:
+            real_eigenvalues.append(np.real(eigv))
 
-    t = real[0]+real[1]
-    Icp = (real[1]-real[0])/t
-    Ic = (real[2]+real[3])/t  # ???????????????????????
-    Is = (imag[2]-imag[3])/t
+    if(len(complex_eigenvalues) != 0):
+        #real_eigenvalues = np.sort(np.array(real_eigenvalues))
+        t = real_eigenvalues[0] + real_eigenvalues[1]
+        Icp = np.abs((real_eigenvalues[1] - real_eigenvalues[0]))/t # We have to fix a sign for Icp
+        Ic = np.real((complex_eigenvalues[0] + complex_eigenvalues[1]))/t 
+        Is = np.abs((complex_eigenvalues[1] - complex_eigenvalues[0]))/t      # We have to fix a sign for Is
+        return t, Icp, Ic, Is  # ok even >=1 because there is a different in the article
+    
+    else:
+        return "On obtient quatre valeurs propres réelles"
 
-    return t, Icp, Ic, Is  # ok even >=1 because there is a different in the articl
+    
+
+def ComputeMullerWithoutRotation(b0, b):
+    eigenvalues = ComputeEigenvaluesCmatrix(b0 , b)
+    t_Icp_Ic_Is = Compute_t_Icp_Ic_Is(eigenvalues)
+    t = t_Icp_Ic_Is[0]
+    Icp = t_Icp_Ic_Is[1]
+    Ic = t_Icp_Ic_Is[2]
+    Is = t_Icp_Ic_Is[3]
+
+    Muller_WithoutRotation = (t/2)*np.array([[1, Icp, 0, 0],
+                                             [Icp, 1, 0, 0],
+                                             [0, 0, Ic, Is],
+                                            [0, 0, -Is, Ic]])
+
+    return Muller_WithoutRotation
 
 
 def f_Rotation(a): return np.array([[1, 0, 0, 0],
@@ -33,7 +60,7 @@ def f_Rotation(a): return np.array([[1, 0, 0, 0],
 def Find_real(thetaP,thetaR,M_0, M_1, M_2, M_3, B_0, B_1, B_2, B_3):
     m=50
     thetaP_x=np.linspace(thetaP-10,thetaP+10,m)
-    thetaR_y=np.linspace(thetaR-5,thetaR+5,m)
+    thetaR_y=np.linspace(thetaR-10,thetaR+10,m)
     lamda_16_lamda_15=np.zeros((m,m))
     min =4
     couple=0
