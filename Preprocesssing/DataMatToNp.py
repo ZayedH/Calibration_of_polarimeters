@@ -24,12 +24,15 @@ B_3 = d['E3_PSG']
 size_matrix = np.shape(B_0)[0]
 
 ### Extract submatrix for NaiveCalibration and Recursive###
-n = 256
+n =100  #sizewindow
+sizewindow_n=n//2
+center_n=size_matrix//2
 
-b0 = B_0[0:n, 0:n]
-b1 = B_1[0:n, 0:n]
-b2 = B_2[0:n, 0:n]
-b3 = B_3[0:n, 0:n]
+b0 = B_0[center_n-sizewindow_n:center_n+sizewindow_n, center_n-sizewindow_n:center_n+sizewindow_n] # for enrique data we have to extract from the center
+b1 = B_1[center_n-sizewindow_n:center_n+sizewindow_n, center_n-sizewindow_n:center_n+sizewindow_n]
+b2 = B_2[center_n-sizewindow_n:center_n+sizewindow_n, center_n-sizewindow_n:center_n+sizewindow_n]
+b3 = B_3[center_n-sizewindow_n:center_n+sizewindow_n, center_n-sizewindow_n:center_n+sizewindow_n]
+
 
 A = np.zeros((n, n, 4, 4))
 W = np.zeros((n, n, 4, 4))
@@ -41,7 +44,7 @@ M_Air = sim.M_Air
 #M_Ret30 = sim.M_Ret30
 
 ####___Extract submatrices to do the mean over a central window___###
-sizewindow = 20  ## a window aroud the center
+sizewindow = 10  ## a window aroud the center
 center = size_matrix//2
 
 # Normalisation is just doing nothing
@@ -66,20 +69,26 @@ lamda_16_lamda_15=m.Find_real(90,30,M_Air,M_Pol0_moy,M_Pol90exp_moy,M_Ret30exp_m
 plt.figure(figsize=(8,6),
            facecolor='w')
 img= plt.imshow(lamda_16_lamda_15[2])
-fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
-X, Y = np.meshgrid(lamda_16_lamda_15[0], lamda_16_lamda_15[1])
-surf = ax.plot_surface(X, Y,lamda_16_lamda_15[2])
+# fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
+# X, Y = np.meshgrid(lamda_16_lamda_15[0], lamda_16_lamda_15[1])
+# surf = ax.plot_surface(X, Y,lamda_16_lamda_15[2])
 
 ##Test eigenvalues
-eigenvalues = m.ComputeEigenvaluesCmatrix(b0_moy ,b1_moy)
-print(eigenvalues)
-print(m.Compute_t_Icp_Ic_Is(eigenvalues))
+# eigenvalues = m.ComputeEigenvaluesCmatrix(b0_moy ,b1_moy)
+# print(eigenvalues)
+# print(m.Compute_t_Icp_Ic_Is(eigenvalues))
 
 
 plt.show()
 
 print("The minimum angles : ",lamda_16_lamda_15[3])
-        
+
+thetaP=lamda_16_lamda_15[3][0] ## to be changed
+thetaR=lamda_16_lamda_15[3][1] ## to be changed
+
+M_Pol0=M_Pol0_moy
+M_Pol90 = m.f_Rotation(thetaP*np.pi/180)@M_Pol90exp_moy@m.f_Rotation(-thetaP*np.pi/180)
+M_Ret30 = m.f_Rotation(thetaR*np.pi/180)@M_Ret30exp_moy@m.f_Rotation(-thetaR*np.pi/180)
 
 # t1 = time.perf_counter()
 # calibrationAandW()
