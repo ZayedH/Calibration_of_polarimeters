@@ -7,7 +7,7 @@ import Calibration_W as w
 
 def ComputeEigenvaluesCmatrix(b0, b):
     b0inv = np.linalg.inv(b0)
-    M_similar = b@b0inv
+    M_similar = b0inv@b  ## ?
     eigenvalues, eigenvectors = np.linalg.eig(M_similar)
 
     return eigenvalues
@@ -18,13 +18,16 @@ def Compute_t_Icp_Ic_Is(eigenvalues):
     real_eigenvalues = []
     complex_eigenvalues = []
     for eigv in eigenvalues:
-        if(np.imag(eigv)!=0):
+        if(np.imag(eigv)!=0):  ## ???? they are all complex in some cases
             complex_eigenvalues.append(eigv)
         else:
             real_eigenvalues.append(np.real(eigv))
 
     if(len(complex_eigenvalues) != 0):
         #real_eigenvalues = np.sort(np.array(real_eigenvalues))
+        # print(eigenvalues)
+        # print(real_eigenvalues)
+        # print(np.real(eigenvalues))
         t = real_eigenvalues[0] + real_eigenvalues[1]
         Icp = np.abs((real_eigenvalues[1] - real_eigenvalues[0]))/t # We have to fix a sign for Icp
         Ic = np.real((complex_eigenvalues[0] + complex_eigenvalues[1]))/t 
@@ -32,7 +35,10 @@ def Compute_t_Icp_Ic_Is(eigenvalues):
         return t, Icp, Ic, Is  # ok even >=1 because there is a different in the article
     
     else:
-        return "On obtient quatre valeurs propres réelles"
+        print("On obtient quatre valeurs propres réelles")
+        real_eigenvalues=np.sort(real_eigenvalues)
+        t=real_eigenvalues[0]/2 ## for now
+        return t,1,0,0
 
     
 
