@@ -37,10 +37,16 @@ def calibrationAandW():
     return 
 
 
-t1 = time.perf_counter()
+# t1 = time.perf_counter()
 calibrationAandW()
-t2 = time.perf_counter()
-print("naive: ",t2 - t1)
+# t2 = time.perf_counter()
+# print("naive: ",t2 - t1)
+
+A_m=np.einsum(
+    'ijkl->kl', A)/(n**2)
+W_m = np.einsum('ijkl->kl',W)/(n**2)
+
+print(W_m)
 
 
 

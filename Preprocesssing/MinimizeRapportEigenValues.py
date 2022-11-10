@@ -64,9 +64,9 @@ def f_Rotation(a): return np.array([[1, 0, 0, 0],
                                     [0, 0, 0, 1]])
 
 def Find_real(thetaP,thetaR,M_0, M_1, M_2, M_3, B_0, B_1, B_2, B_3):
-    m=50
-    thetaP_x=np.linspace(thetaP-10,thetaP+10,m)
-    thetaR_y=np.linspace(thetaR-10,thetaR+10,m)
+    m=100
+    thetaP_x=np.linspace(thetaP-30,thetaP+30,m)
+    thetaR_y=np.linspace(thetaR-30,thetaR+30,m)
     lamda_16_lamda_15=np.zeros((m,m))
     min =4
     couple=0
@@ -74,10 +74,10 @@ def Find_real(thetaP,thetaR,M_0, M_1, M_2, M_3, B_0, B_1, B_2, B_3):
         for j in range(m):
             M_2_thetaP=f_Rotation(thetaP_x[i]*np.pi/180)@M_2@f_Rotation(-thetaP_x[i]*np.pi/180)
             M_3_thetaR=f_Rotation(thetaR_y[j]*np.pi/180)@M_3@f_Rotation(-thetaR_y[j]*np.pi/180)
-            lamda_16_lamda_15[i][j]= w.Calibration_W(M_0, M_1, M_2_thetaP,M_3_thetaR, B_0, B_1, B_2, B_3)[1]
+            lamda_16_lamda_15[i][j]= np.log(np.sqrt(np.abs(w.Calibration_W(M_0, M_1, M_2_thetaP,M_3_thetaR, B_0, B_1, B_2, B_3)[1])))
             if(min>lamda_16_lamda_15[i][j]):
                 min=lamda_16_lamda_15[i][j]
                 couple=[thetaP_x[i],thetaR_y[j]]
 
-    return thetaP_x,thetaR_y,lamda_16_lamda_15,couple
+    return thetaP_x,thetaR_y,lamda_16_lamda_15,couple,np.sqrt(np.abs(min))
 
