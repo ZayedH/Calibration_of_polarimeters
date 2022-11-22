@@ -27,10 +27,10 @@ size_matrix_y = np.shape(B_0)[1]
 
 
 ### Extract submatrix for NaiveCalibration and Recursive###
-n =80  #sizewindow
-sizewindow_n=n//2
-center_n_x=size_matrix_x//2
-center_n_y=size_matrix_y//2
+# n =80  #sizewindow
+# sizewindow_n=n//2
+# center_n_x=size_matrix_x//2
+# center_n_y=size_matrix_y//2
 
 # b0 = B_0[center_n_x-sizewindow_n:center_n_x+sizewindow_n, center_n_y-sizewindow_n:center_n_y+sizewindow_n] # for enrique data we have to extract from the center
 # b1 = B_1[center_n_x-sizewindow_n:center_n_x+sizewindow_n, center_n_y-sizewindow_n:center_n_y+sizewindow_n]
@@ -41,9 +41,9 @@ b0 = B_0
 b1 = B_1
 b2 = B_2
 b3 = B_3
-
-A = np.zeros((n, n, 4, 4))
-W = np.zeros((n, n, 4, 4))
+# np.save("A_and_W_storage/b0.npy" , b0)
+A = np.zeros(np.shape(b0))
+W = np.zeros(np.shape(b0))
 
 # Matrices M de Muller en simulation
 M_Air = sim.M_Air

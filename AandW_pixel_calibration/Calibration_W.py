@@ -7,7 +7,8 @@ def Calibration_W(M_0, M_1, M_2, M_3, B_0, B_1, B_2, B_3):
     KW = K_W(M_0, M_1, M_2, M_3, B_0, B_1, B_2, B_3)
     eigenvalues, eigenvectors = np.linalg.eigh(KW)
     v = eigenvectors[:, 0]
-    v = (1/v[0])*v
+    # v0=np.max(v)
+    # v = (1/v0)*v
     lamda_16_lamda_15=eigenvalues[0]/eigenvalues[1]
 
     return [v.reshape((4, 4)),lamda_16_lamda_15]
