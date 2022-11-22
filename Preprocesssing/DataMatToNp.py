@@ -32,11 +32,15 @@ sizewindow_n=n//2
 center_n_x=size_matrix_x//2
 center_n_y=size_matrix_y//2
 
-b0 = B_0[center_n_x-sizewindow_n:center_n_x+sizewindow_n, center_n_y-sizewindow_n:center_n_y+sizewindow_n] # for enrique data we have to extract from the center
-b1 = B_1[center_n_x-sizewindow_n:center_n_x+sizewindow_n, center_n_y-sizewindow_n:center_n_y+sizewindow_n]
-b2 = B_2[center_n_x-sizewindow_n:center_n_x+sizewindow_n, center_n_y-sizewindow_n:center_n_y+sizewindow_n]
-b3 = B_3[center_n_x-sizewindow_n:center_n_x+sizewindow_n, center_n_y-sizewindow_n:center_n_y+sizewindow_n]
+# b0 = B_0[center_n_x-sizewindow_n:center_n_x+sizewindow_n, center_n_y-sizewindow_n:center_n_y+sizewindow_n] # for enrique data we have to extract from the center
+# b1 = B_1[center_n_x-sizewindow_n:center_n_x+sizewindow_n, center_n_y-sizewindow_n:center_n_y+sizewindow_n]
+# b2 = B_2[center_n_x-sizewindow_n:center_n_x+sizewindow_n, center_n_y-sizewindow_n:center_n_y+sizewindow_n]
+# b3 = B_3[center_n_x-sizewindow_n:center_n_x+sizewindow_n, center_n_y-sizewindow_n:center_n_y+sizewindow_n]
 
+b0 = B_0
+b1 = B_1
+b2 = B_2
+b3 = B_3
 
 A = np.zeros((n, n, 4, 4))
 W = np.zeros((n, n, 4, 4))
@@ -48,7 +52,7 @@ M_Air = sim.M_Air
 #M_Ret30 = sim.M_Ret30
 
 ####___Extract submatrices to do the mean over a central window___###
-sizewindow = 40  ## a window aroud the center
+sizewindow = 4  ## a window aroud the center for the mean
 center_x = size_matrix_x//2
 center_y = size_matrix_y//2
 
@@ -71,23 +75,25 @@ M_Ret30exp_moy = m.ComputeMullerWithoutRotation(b0_moy , b3_moy)
 
 
 lamda_16_lamda_15=m.Find_real(90,45,M_Air,M_Pol0_moy,M_Pol90exp_moy,M_Ret30exp_moy,b0_moy,b1_moy,b2_moy,b3_moy)
+print("min angles",lamda_16_lamda_15[2][25,38])
 plt.figure(figsize=(8,6),
            facecolor='w')
+#ax = np.
 img= plt.imshow(lamda_16_lamda_15[2])
 fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
-X, Y = np.meshgrid(lamda_16_lamda_15[0], lamda_16_lamda_15[1])
-surf = ax.plot_surface(X, Y,lamda_16_lamda_15[2])
+X, Y = np.meshgrid(lamda_16_lamda_15[1], lamda_16_lamda_15[0])
+surf = ax.plot_surface(Y, X,lamda_16_lamda_15[2])
 
-#Test eigenvalues
-eigenvalues = m.ComputeEigenvaluesCmatrix(b0_moy ,b1_moy)
-print(eigenvalues)
-print(m.Compute_t_Icp_Ic_Is(eigenvalues))
+# #Test eigenvalues
+# eigenvalues = m.ComputeEigenvaluesCmatrix(b0_moy ,b1_moy)
+# print(eigenvalues)
+# print(m.Compute_t_Icp_Ic_Is(m.OrganizeEigenSamp(eigenvalues , 0.001)))
 
 
-plt.show()
+# plt.show()
 
-print("The minimum angles : ",lamda_16_lamda_15[3])
-print(lamda_16_lamda_15[4])
+# print("The minimum angles : ",lamda_16_lamda_15[3])
+# print("log(sqrt(min)) : ",lamda_16_lamda_15[4])
 
 thetaP=lamda_16_lamda_15[3][0] ## to be changed
 thetaR=lamda_16_lamda_15[3][1] ## to be changed
