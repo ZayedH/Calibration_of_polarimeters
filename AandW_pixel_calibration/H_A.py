@@ -18,10 +18,4 @@ def H_A(M1, M2, B1, B2):
             zero[i, j] = 0
     return a
 
-# take around 0.4 on a mac pro processor
 
-
-#I = np.identity(4)
-#wI = np.ones((4, 4))
-#print("#####_H_A_##########")
-#print(H_A(I, wI, I, wI))

@@ -2,12 +2,12 @@ import numpy as np
 import sys
 sys.path.insert(1, 'AandW_pixel_calibration')
 import Calibration_W as w
-# We search ThetaP for polarizer and ThetaR for retarder
+
 
 
 def ComputeEigenvaluesCmatrix(b0, b):
     b0inv = np.linalg.inv(b0)
-    M_similar = b0inv@b  ## ?
+    M_similar = b0inv@b  
     eigenvalues, eigenvectors = np.linalg.eig(M_similar)
 
     return eigenvalues
@@ -139,6 +139,7 @@ def Find_real(thetaP,thetaR,M_0, M_1, M_2, M_3, B_0, B_1, B_2, B_3):
             if(min>lamda_16_lamda_15[i][j]):
                 min=lamda_16_lamda_15[i][j]
                 couple=[thetaP_x[i],thetaR_y[j]]
+    couple.append(min)
 
-    return thetaP_x,thetaR_y,lamda_16_lamda_15,couple,min
+    return [thetaP_x,thetaR_y,lamda_16_lamda_15,couple]
 
