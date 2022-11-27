@@ -25,6 +25,24 @@ shape=np.shape(B_0)
 A = np.zeros(shape)
 W = np.zeros(shape)
 
+##Parameters of the Polarisor oriented at 0
+t_Pol0 = np.zeros((size_matrix_x,size_matrix_y))
+Icp_Pol0 = np.zeros((size_matrix_x,size_matrix_y))
+Ic_Pol0 = np.zeros((size_matrix_x,size_matrix_y))
+Is_Pol0 = np.zeros((size_matrix_x,size_matrix_y))
+
+##Parameters of the Polarisor oriented at 90
+t_Pol90 = np.zeros((size_matrix_x,size_matrix_y))
+Icp_Pol90 = np.zeros((size_matrix_x,size_matrix_y))
+Ic_Pol90 = np.zeros((size_matrix_x,size_matrix_y))
+Is_Pol90 = np.zeros((size_matrix_x,size_matrix_y))
+
+##Parameters of the Retardator oriented at 30
+t_Ret30 = np.zeros((size_matrix_x,size_matrix_y))
+Icp_Ret30 = np.zeros((size_matrix_x,size_matrix_y))
+Ic_Ret30 = np.zeros((size_matrix_x,size_matrix_y))
+Is_Ret30 = np.zeros((size_matrix_x,size_matrix_y))
+
 M_Air = sim.M_Air
 
 
