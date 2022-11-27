@@ -126,8 +126,8 @@ def f_Rotation(a): return np.array([[1, 0, 0, 0],
 
 def Find_real(thetaP,thetaR,M_0, M_1, M_2, M_3, B_0, B_1, B_2, B_3):
     m=50
-    thetaP_x=np.linspace(thetaP-50,thetaP+50,m)
-    thetaR_y=np.linspace(thetaR-50,thetaR+50,m)
+    thetaP_x=np.linspace(thetaP-30,thetaP+30,m)
+    thetaR_y=np.linspace(thetaR-30,thetaR+30,m)
     lamda_16_lamda_15=np.zeros((m,m))
     min =40
     couple=0
