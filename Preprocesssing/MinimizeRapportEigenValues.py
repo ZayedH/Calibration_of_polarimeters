@@ -104,10 +104,35 @@ def Compute_t_Icp_Ic_Is(eigenvalues):
     max=np.max(np.abs([t,Icp,Ic,Is]))
     return t/max, Icp/max, Ic/max, Is/max  # ok even >=1 because there is a different in the article
     
+def Compute_t_Icp_Ic_Is_moy(eigenvalues):
+    "We assume that it respects the theoretical form"
+    # max=np.max(np.abs(eigenvalues)) 
+    t = np.real(eigenvalues[0][0] + eigenvalues[1][0])
+    Icp = np.real((eigenvalues[1][0]  - eigenvalues[0][0]))/t # We have to fix a sign for Icp
+    Ic = np.real((eigenvalues[2][0] + eigenvalues[3][0]))/t 
+    Is = np.imag((eigenvalues[3][0] - eigenvalues[2][0]))/t      # We have to fix a sign for Is
+    max=np.max(np.abs([t,Icp,Ic,Is]))
+    return t, Icp, Ic, Is  # ok even >=1 because there is a different in the article
 
 def ComputeMullerWithoutRotation(b0, b):
     eigenvalues = ComputeEigenvaluesCmatrix(b0 , b)
-    t_Icp_Ic_Is = Compute_t_Icp_Ic_Is(OrganizeEigenSamp(eigenvalues , 0.08))
+    t_Icp_Ic_Is = Compute_t_Icp_Ic_Is(OrganizeEigenSamp(eigenvalues , 0.008))
+    t = t_Icp_Ic_Is[0]
+    Icp = t_Icp_Ic_Is[1]
+    Ic = t_Icp_Ic_Is[2]
+    Is = t_Icp_Ic_Is[3]
+
+    Muller_WithoutRotation = (t/2)*np.array([[1, Icp, 0, 0],
+                                             [Icp, 1, 0, 0],
+                                             [0, 0, Ic, Is],
+                                            [0, 0, -Is, Ic]])
+
+    return Muller_WithoutRotation
+
+
+def ComputeMullerWithoutRotation_moy(b0, b):
+    eigenvalues = ComputeEigenvaluesCmatrix(b0 , b)
+    t_Icp_Ic_Is = Compute_t_Icp_Ic_Is_moy(OrganizeEigenSamp(eigenvalues , 0.008))
     t = t_Icp_Ic_Is[0]
     Icp = t_Icp_Ic_Is[1]
     Ic = t_Icp_Ic_Is[2]

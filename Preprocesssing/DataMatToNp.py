@@ -61,10 +61,10 @@ b3_moy = np.einsum(
     'ijkl->kl', B_3[center_x-sizewindow:center_x+sizewindow, center_y -sizewindow:center_y +sizewindow])
 
 
-M_Pol0_moy = m.ComputeMullerWithoutRotation(b0_moy , b1_moy)
-M_Pol90exp_moy = m.ComputeMullerWithoutRotation(b0_moy , b2_moy)
+M_Pol0_moy = m.ComputeMullerWithoutRotation_moy(b0_moy , b1_moy)
+M_Pol90exp_moy = m.ComputeMullerWithoutRotation_moy(b0_moy , b2_moy)
 
-M_Ret30exp_moy = m.ComputeMullerWithoutRotation(b0_moy , b3_moy)
+M_Ret30exp_moy = m.ComputeMullerWithoutRotation_moy(b0_moy , b3_moy)
 
 
 lamda_16_lamda_15=m.Find_real(90,45,M_Air,M_Pol0_moy,M_Pol90exp_moy,M_Ret30exp_moy,b0_moy,b1_moy,b2_moy,b3_moy)
