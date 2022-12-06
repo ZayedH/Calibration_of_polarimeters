@@ -18,47 +18,65 @@ def calibrationAandW():
             B2_pixel = B_2[i, j, :]
             B3_pixel = B_3[i, j, :]
 
-            
             M_Pol0 = M_Pol0_moy
             M_Pol90_ = M_Pol90exp_moy
             M_Ret30_ = M_Ret30exp_moy
 
-            if(np.linalg.det( B0_pixel)!=0):
+
+            # print("out of if",np.linalg.cond( B0_pixel))
+            if(np.linalg.cond(B0_pixel)>=50):
+                # print("inversible",np.linalg.cond(B0_pixel))
                 # print(np.linalg.cond( B0_pixel))
-                C1=ComputeCmatrix(B0_pixel,B1_pixel)
-                C2=ComputeCmatrix(B0_pixel,B2_pixel)
-                C3=ComputeCmatrix(B0_pixel,B3_pixel)
-                if(np.linalg.cond(C1)<30):
-                    M_Pol0 = ComputeMullerWithoutRotation(C1)
-                t_sur2 = M_Pol0[0,0]
-                t_Pol0[i,j] = 2*t_sur2
-                Icp_Pol0[i,j] = M_Pol0[0,1]/(t_sur2)
-                Ic_Pol0[i,j] = M_Pol0[2,2]/(t_sur2)
-                Is_Pol0[i,j] = M_Pol0[2,3]/(t_sur2)
-                if(np.linalg.cond(C2)<30):
-                    M_Pol90_ = ComputeMullerWithoutRotation(C2)
-                t_sur2 = M_Pol90_[0,0]
-                t_Pol90[i,j] = 2*t_sur2
-                Icp_Pol90[i,j] = M_Pol90_[0,1]/(t_sur2)
-                Ic_Pol90[i,j] = M_Pol90_[2,2]/(t_sur2)
-                Is_Pol90[i,j] = M_Pol90_[2,3]/(t_sur2)
-                M_Pol90 = f_Rotation(thetaP*np.pi/180)@M_Pol90_@f_Rotation(-thetaP*np.pi/180)
-                if(np.linalg.cond(C3)<30):
-                    M_Ret30_ = ComputeMullerWithoutRotation(C3)
-                t_sur2 = M_Ret30_[0,0]
-                t_Ret30[i,j] = 2*t_sur2
-                Icp_Ret30[i,j] = M_Ret30_[0,1]/(t_sur2)
-                Ic_Ret30[i,j] = M_Ret30_[2,2]/(t_sur2)
-                Is_Ret30[i,j] = M_Ret30_[2,3]/(t_sur2)
-                M_Ret30 = f_Rotation(thetaR*np.pi/180)@M_Ret30_@f_Rotation(-thetaR*np.pi/180)
+                if((2<=i<=size_matrix_x-3) and (2<=j<=size_matrix_y-3)):
+                    # if not (np.linalg.cond(C1)<30):
+                        B0_pixel = np.einsum('ijkl->kl', B_0[i-2:i+2, j-2:j+2])/16
+                        if(np.linalg.cond(B0_pixel)>=50):
+                            B0_pixel = b0_moy
+
+                
+            C1=ComputeCmatrix(B0_pixel,B1_pixel)
+            C2=ComputeCmatrix(B0_pixel,B2_pixel)
+            C3=ComputeCmatrix(B0_pixel,B3_pixel)
+                
+                    # if not (np.linalg.cond(C1)<30):
+                        # B0_pixel = np.einsum('ijkl->kl', B_0[i-2:i+2, j-2:j+2])/16
+                    # if not (np.linalg.cond(C2)<30):
+                        # B2_pixel = np.einsum('ijkl->kl', B_2[i-2:i+2, j-2:j+2])/16
+                    # if not (np.linalg.cond(C3)<30):
+                        # B3_pixel = np.einsum('ijkl->kl', B_3[i-2:i+2, j-2:j+2])/16
+                # if(np.linalg.cond(C1)<30):
+            M_Pol0 = ComputeMullerWithoutRotation(C1)
+            t_sur2 = M_Pol0[0,0]
+            t_Pol0[i,j] = t_sur2
+            Icp_Pol0[i,j] = M_Pol0[0,1]/(t_sur2)
+            Ic_Pol0[i,j] = M_Pol0[2,2]/(t_sur2)
+            Is_Pol0[i,j] = M_Pol0[2,3]/(t_sur2)
+                # if(np.linalg.cond(C2)<30):
+            M_Pol90_ = ComputeMullerWithoutRotation(C2)
+            t_sur2 = M_Pol90_[0,0]
+            t_Pol90[i,j] = t_sur2
+            Icp_Pol90[i,j] = M_Pol90_[0,1]/(t_sur2)
+            Ic_Pol90[i,j] = M_Pol90_[2,2]/(t_sur2)
+            Is_Pol90[i,j] = M_Pol90_[2,3]/(t_sur2)
+            M_Pol90 = f_Rotation(thetaP*np.pi/180)@M_Pol90_@f_Rotation(-thetaP*np.pi/180)
+                # if(np.linalg.cond(C3)<30):
+            M_Ret30_ = ComputeMullerWithoutRotation(C3)
+            t_sur2 = M_Ret30_[0,0]
+            t_Ret30[i,j] = t_sur2
+            Icp_Ret30[i,j] = M_Ret30_[0,1]/(t_sur2)
+            Ic_Ret30[i,j] = M_Ret30_[2,2]/(t_sur2)
+            Is_Ret30[i,j] = M_Ret30_[2,3]/(t_sur2)
+            M_Ret30 = f_Rotation(thetaR*np.pi/180)@M_Ret30_@f_Rotation(-thetaR*np.pi/180)
 
                 # Make pixel calibration
-                A_pixel = Calibration_A(
+            A_pixel = Calibration_A(
                     M_Air, M_Pol0, M_Pol90, M_Ret30, B0_pixel, B1_pixel, B2_pixel, B3_pixel)
-                W_pixel = Calibration_W(
+            W_pixel = Calibration_W(
                     M_Air, M_Pol0, M_Pol90, M_Ret30, B0_pixel, B1_pixel, B2_pixel, B3_pixel)
-                A[i, j] = A_pixel
-                W[i, j] = W_pixel[0]
+            A[i, j] = A_pixel
+            W[i, j] = W_pixel[0]
+
+            # print(np.linalg.inv(A_pixel)@B0_pixel@np.linalg.inv(W_pixel[0]))
 
     return 
 
