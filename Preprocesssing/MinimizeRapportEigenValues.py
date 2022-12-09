@@ -76,12 +76,12 @@ def OrganizeEigenSamp(Eig, Lim):
             if(cond): # Condition satisfied
                 if(np.imag(Eig[i]) >= 0) : # Following convention
                                     # of positive retardance)
-                    orEig[3] = Eig[i]              
-                    orEig[2] = Eig[j]               
+                    orEig[2] = Eig[i]              
+                    orEig[3] = Eig[j]               
 
                 elif(np.imag(Eig[i]) < 0) :
-                    orEig[2] = Eig[i]
-                    orEig[3] = Eig[j]
+                    orEig[3] = Eig[i]
+                    orEig[2] = Eig[j]
                 equals = True # Eigenvalues 3 and 4 found
                 # Delete 3 and 4. Two remaining eigenvalues to sort
                 Eig = np.delete(Eig , (i,j))
@@ -91,11 +91,11 @@ def OrganizeEigenSamp(Eig, Lim):
 
     if(equals) : # sort the two remaining eigenvalues
         if(Eig[1] >= Eig[0]) : # convention: psi between 0 y pi/4
-            orEig[0] = Eig[0]
-            orEig[1] = Eig[1]
-        else:
             orEig[0] = Eig[1]
             orEig[1] = Eig[0]
+        else:
+            orEig[0] = Eig[0]
+            orEig[1] = Eig[1]
 
     elif(Ni == 0) : # All eigenvalues are real but no relation was found            
         orEig = np.sort(Eig)[::-1] # Sort from mayor to minor
@@ -108,9 +108,9 @@ def Compute_t_Icp_Ic_Is(eigenvalues):
     "We assume that it respects the theoretical form"
     # max=np.max(np.abs(eigenvalues)) 
     t = np.real(eigenvalues[0][0] + eigenvalues[1][0])
-    Icp = np.real((eigenvalues[1][0]  - eigenvalues[0][0]))/t # We have to fix a sign for Icp
+    Icp = np.real((eigenvalues[0][0]  - eigenvalues[1][0]))/t # We have to fix a sign for Icp
     Ic = np.real((eigenvalues[2][0] + eigenvalues[3][0]))/t 
-    Is = np.imag((eigenvalues[3][0] - eigenvalues[2][0]))/t      # We have to fix a sign for Is
+    Is = np.imag((eigenvalues[2][0] - eigenvalues[3][0]))/t      # We have to fix a sign for Is
     # max=np.max(np.abs([t,Icp,Ic,Is]))
     return t, Icp, Ic, Is  # ok even >=1 because there is a different in the article
     

@@ -7,6 +7,9 @@ from scipy.io import loadmat
 sys.path.insert(1, 'AandW_pixel_calibration')
 import Simulation as sim
 
+# sys.path.insert(1, 'AandW_pixel_calibration')
+# from Calibration_A import Calibration_A
+# from Calibration_W import Calibration_W
 
 a = loadmat("Preprocesssing/D_matrix/B0.mat")
 b = loadmat("Preprocesssing/D_matrix/E1_PSG.mat")
@@ -65,6 +68,13 @@ M_Pol0_moy = m.ComputeMullerWithoutRotation_moy(b0_moy , b1_moy)
 M_Pol90exp_moy = m.ComputeMullerWithoutRotation_moy(b0_moy , b2_moy)
 
 M_Ret30exp_moy = m.ComputeMullerWithoutRotation_moy(b0_moy , b3_moy)
+
+# A_pixel_moy = Calibration_A(
+#                     M_Air, M_Pol0_moy,M_Pol90exp_moy, M_Ret30exp_moy, b0_moy, b1_moy, b2_moy , b3_moy)
+# W_pixel_moy = Calibration_W(
+#                     M_Air, M_Pol0_moy, M_Pol90exp_moy, M_Ret30exp_moy, b0_moy, b1_moy, b2_moy , b3_moy)
+# print(A_pixel_moy)
+# print(W_pixel_moy)
 
 
 lamda_16_lamda_15=m.Find_real(90,45,M_Air,M_Pol0_moy,M_Pol90exp_moy,M_Ret30exp_moy,b0_moy,b1_moy,b2_moy,b3_moy)
